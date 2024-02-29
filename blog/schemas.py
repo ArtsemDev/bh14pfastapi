@@ -59,7 +59,7 @@ class TopicEditForm(TopicCreateForm):
     ...
 
 
-class TopicDetail(TopicCreateForm):
+class TopicDetail(BaseModel):
     id: PositiveInt = Field(
         default=...,
         title="Topic ID",
@@ -84,4 +84,17 @@ class TopicDetail(TopicCreateForm):
         default=...,
         min_length=1,
         title="Topic Tag Details"
+    )
+    title: str = Field(
+        default=...,
+        min_length=2,
+        max_length=128,
+        title="Topic Title",
+        examples=["Кто убил мертвое море?"]
+    )
+    body: str = Field(
+        default=...,
+        min_length=1,
+        title="Topic Body",
+        examples=["Me"]
     )

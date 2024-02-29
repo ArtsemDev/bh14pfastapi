@@ -21,8 +21,8 @@ router = APIRouter(
 )
 async def tag_list(
         session: DBSession,
-        order_by: Literal["id", "name"] = Query(default="id"),
-        order: Literal["asc", "desc"] = Query(default="asc")
+        order_by: Literal["id", "name"] = Query(default="id", alias="orderBy"),
+        order: Literal["asc", "desc"] = Query(default="asc", alias="orderDirection")
 ):
     objs = await session.scalars(
         statement=select(Tag)

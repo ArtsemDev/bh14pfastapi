@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  blog:
+    container_name: "bh_blog"
+    build:
+      context: .
+      dockerfile: blog/Dockerfile
+    command: python -m blog
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - "./src:/opt/src:ro"
+      - "./blog:/opt/blog:ro"
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+
+  migrations:
+    container_name: "bh_migrations"
+    build:
+      context: .
+      dockerfile: migrations/Dockerfile
+    command: python -m migrations
+    volumes:
+      - ".:/opt:rw"
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+
+  db:
+    container_name: "bh_db"
+    image: postgres:16-alpine3.19
+    hostname: "bh"
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: admin
