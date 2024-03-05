@@ -19,6 +19,7 @@ class Config(BaseSettings):
 
 MANAGE_APP_MIGRATIONS = [
     "blog",
+    "profile",
 ]
 
 config = Config()

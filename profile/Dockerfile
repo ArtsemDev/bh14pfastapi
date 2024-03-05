@@ -10,7 +10,7 @@ ENV \
     PYTHONFAULTHANDLER=1
 
 
-COPY ./blog $APP_PATH/blog
+COPY ./profile $APP_PATH/profile
 COPY ./src $APP_PATH/src
 
-RUN pip install --no-cache-dir --upgrade -r $APP_PATH/blog/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r $APP_PATH/profile/requirements.txt

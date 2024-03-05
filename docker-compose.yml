@@ -9,7 +9,7 @@ services:
     command: python -m blog
     restart: always
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       - "./src:/opt/src:ro"
       - "./blog:/opt/blog:ro"
@@ -17,6 +17,26 @@ services:
       - ".env"
     depends_on:
       - db
+
+  profile:
+    container_name: "bh_profile"
+    build:
+      context: .
+      dockerfile: profile/Dockerfile
+    command: python -m profile
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - "./src:/opt/src:ro"
+      - "./profile:/opt/profile:ro"
+    environment:
+      SESSION_STORAGE_URL: redis://bh:6379/0
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+      - redis
 
   migrations:
     container_name: "bh_migrations"
@@ -40,3 +60,9 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: admin
+
+  redis:
+    container_name: "bh_redis"
+    hostname: "bh"
+    restart: always
+    image: redis:7.2.2-alpine3.18
