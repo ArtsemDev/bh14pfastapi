@@ -13,6 +13,8 @@ services:
     volumes:
       - "./src:/opt/src:ro"
       - "./blog:/opt/blog:ro"
+      - "./templates:/opt/templates:ro"
+      - "./static:/opt/static:ro"
     env_file:
       - ".env"
     depends_on:
@@ -30,6 +32,8 @@ services:
     volumes:
       - "./src:/opt/src:ro"
       - "./profile:/opt/profile:ro"
+      - "./templates:/opt/templates:ro"
+      - "./static:/opt/static:ro"
     environment:
       SESSION_STORAGE_URL: redis://bh:6379/0
     env_file:
@@ -60,6 +64,41 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: admin
+
+  celery:
+    container_name: "bh_celery"
+    build:
+      context: .
+      dockerfile: blog/Dockerfile
+    command: celery -A src.config:celery worker -l INFO --concurrency=10
+    restart: always
+    volumes:
+      - "./src:/opt/src:ro"
+      - "./blog:/opt/blog:ro"
+      - "./templates:/opt/templates:ro"
+      - "./static:/opt/static:ro"
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+      - celery_beat
+
+  celery_beat:
+    container_name: "bh_celery_beat"
+    build:
+      context: .
+      dockerfile: blog/Dockerfile
+    command: celery -A src.config:celery beat -l INFO
+    restart: always
+    volumes:
+      - "./src:/opt/src:ro"
+      - "./blog:/opt/blog:ro"
+      - "./templates:/opt/templates:ro"
+      - "./static:/opt/static:ro"
+    env_file:
+      - ".env"
+    depends_on:
+      - db
 
   redis:
     container_name: "bh_redis"

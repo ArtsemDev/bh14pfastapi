@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+HOME PAGE
+{% endblock %}
+
+{% block body %}
+<!-- Navigation-->
+{% include 'blog/components/navigation.html' %}
+<!-- Header-->
+{% include 'blog/components/header.html' %}
+<form method="post">
+{{ feedback_form.csrf_token }}
+{{ feedback_form.email }}
+{{ feedback_form.message }}
+    <button type="submit">SEND</button>
+</form>
+<!-- Section-->
+{% include 'blog/components/product-card-list.html' %}
+<!-- Footer-->
+{% include 'blog/components/footer.html' %}
+{% endblock %}
